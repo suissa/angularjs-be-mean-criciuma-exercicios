@@ -1,0 +1,70 @@
+<!doctype html>
+<html data-ng-app="workshopBeMEAN">
+  <title>{{ workshop }}</title>
+  <body>
+
+    <div data-ng-controller='BeerController'>
+      {{ cervejas }}
+
+      <pre>Ordenando por predicate = {{predicate}}; reverse = {{reverse}}</pre>
+      
+      <a href="" data-ng-click="predicate = 'price'; reverse=!reverse">Ordenar por: {{ predicate }}</a>
+      <ul>
+      <!-- Parecido com o nosso for no Jade -->
+        <li data-ng-repeat='cerveja in cervejas | orderBy:predicate:reverse'>
+        <!-- acessando os valores do array -->
+          {{ cerveja.name }} - {{ cerveja.price }}
+        </li>
+      </ul>
+    </div>
+
+    <script src="angular.min.js"></script>
+    <script>
+      angular.module('workshopBeMEAN', ['workshopFilters'])
+      .controller('BeerController', ['$scope', function($scope){
+          $scope.reverse = true;
+          $scope.predicate = 'name';
+        // criamos um array de cervejas
+          var cervejas = [{
+            name: 'Kaiser', price: 2
+            }, {
+              name: 'Skol', price: 3
+            }, {
+              name: 'Glacial', price: 4
+            }, {
+              name: 'Polar', price: 6
+            }, {
+              name: 'Heineken', price: 10
+            }
+          ];
+        // instanciamos nosso array no nosso scope
+        // para que tenhamos acesso à esse array na View
+          $scope.cervejas = cervejas;
+
+      }]);
+
+      angular.module('workshopFilters', [])
+        .filter('reverseName', function () {
+          return function (text) {
+            if(text)
+              return text.split("").reverse().join("");
+          };
+        })
+        .filter('truncate', function () {
+          return function (text, length, end) {
+            if (isNaN(length))
+                length = 10;
+            if (end === undefined)
+                end = "...";
+            if (text.length <= length || text.length - end.length <= length) {
+                return text;
+            }
+            else {
+                return String(text).substring(0, length-end.length) + end;
+            }
+          };
+      });
+    </script>
+  </body>
+</html>
+
