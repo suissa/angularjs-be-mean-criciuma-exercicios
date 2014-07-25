@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "/usr/local/share/npm/bin/http-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "node preinstall.js"
   },
   "author": "",
   "license": "BSD-2-Clause"

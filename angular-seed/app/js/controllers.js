@@ -9,27 +9,27 @@ angular.module('myApp.controllers', [])
   .controller('MyCtrl2', ['$scope', function($scope) {
 
   }])
-  .controller('HTTPController', ['$scope', '$http', 
-    function($scope, $http) {
+  .controller('HTTPController', ['$scope', '$http', 'RedTubeService',
+    function($scope, $http, RedTubeService) {
 
-      $scope.search = 'Sasha%20Gray';
+    $scope.search = 'Sasha%20Gray';
 
-      $scope.$watch('search', function(data) {
-        console.log('watch');
-        search(data);
+    $scope.$watch('search', function(data) {
+      console.log('watch');
+      search(data);
+    });
+
+    function search(query){
+      var url = 'http://cors-server.getup.io/url/api.redtube.com/?data=redtube.Videos.searchVideos&search='+query;
+      // delete $http.defaults.headers.common['X-Requested-With'];
+      RedTubeService(url)
+      .success(function(data) { //função executada após o sucesso da requisição
+        console.log(data);
+        $scope.videos = data.videos;})
+      .error(function(err){ //função executada após o erro da requisição
+        console.log('Error: ', err)
       });
-
-      function search(query){
-        var url = 'http://cors-server.getup.io/url/api.redtube.com/?data=redtube.Videos.searchVideos&search='+query;
-        // delete $http.defaults.headers.common['X-Requested-With'];
-        $http.get(url)
-        .success(function(data) { //função executada após o sucesso da requisição
-          console.log(data);
-          $scope.videos = data.videos;})
-        .error(function(err){ //função executada após o erro da requisição
-          console.log('Error: ', err)
-        });
-      }
+    }
 
 
   }])
