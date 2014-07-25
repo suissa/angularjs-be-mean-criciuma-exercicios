@@ -1,0 +1,38 @@
+<h2>Adega Be MEAN - Cerverjas</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th data-ng-click='ordenar("name")'>Nome</th>
+      <th data-ng-click='ordenar("price")'>Preço</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-ng-repeat='beer in cervejas | orderBy:predicate:reverse'>
+      <td>{{ beer.name }}</td>
+      <td>{{ beer.price }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div data-ng-controller='HTTPController'>
+  <!-- {{ videos }} -->
+
+  <hr>
+  <input type="text" data-ng-model="search">
+  <hr>
+
+  <ul>
+    <li data-ng-repeat='v in videos'>
+
+      <h3>{{v.video.title}}</h3>
+      <a href={{v.video.url}}>
+        <img data-ng-src="{{ v.video.default_thumb }}" alt="{{v.video.title}}" title="{{v.video.title}}">
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+
+
