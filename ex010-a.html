@@ -1,0 +1,127 @@
+<!doctype html>
+<html data-ng-app="workshopBeMEAN">
+  <title>{{ workshop }}</title>
+  <body>
+
+    <div data-ng-controller='BeerController'>
+    <!-- Exibição do array de cervejas setado no BeerController -->
+      {{ cervejas }}
+
+      <pre>Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>
+      
+      <a href="" data-ng-click="predicate = 'name'; reverse=!reverse">Nome</a>
+
+      <!-- Listamos as cervejas do nosso escopo a diretiva ng-repeat -->
+      <ul>
+        <!-- instanciamos o valor de cada cerveja em beer -->
+        <li data-ng-repeat='beer in cervejas | orderBy: predicate:reverse'>
+          <!-- recuperamos os valores de name e price de cada cerveja -->
+          {{ beer.name }} - {{ beer.price }}
+        </li>
+      </ul>
+    </div>
+
+    <div data-ng-controller='UserController'>
+
+      <input type="text" data-ng-model="search">
+
+      <hr>
+
+      <section id="{{ user.login }}-hcard-name" class="vcard">
+        <div>
+          <img ng-src="{{ user.avatar_url }}" alt="{{ user.name }}" width="100">
+        </div>
+        <div>
+          Nickname: <span class="fn nickname">{{ user.login }}</span>
+        </div>
+        <div> 
+          Blog: <a class="url fn org" data-ng-href="{{ user.blog }}">{{ user.blog }}</a>
+        <div></div>
+        <div class="adr">
+          <span class="type">Location</span>:
+          <span class="locality">{{ user.location }}</span>
+        </div>
+      </section>
+
+    </div>
+
+    <script src="angular.min.js"></script>
+    <script>
+      angular.module('workshopBeMEAN', ['workshopFilters', 'workshopControllers'])
+
+      // Criando módulod e controllers
+      angular.module('workshopControllers', [])
+      // Criando o EnderecoController
+      .controller('UserController', ['$scope', '$http', 
+        function($scope, $http){
+
+          // exemplo de função que irá rodar com um CLICK
+          $scope.rodar = function(){
+            alert('RODOU');
+          }
+
+          // delete $http.defaults.headers.common['X-Requested-With'];
+
+          $scope.search = 'suissa';
+
+          $scope.$watch('search', function(data) {
+            console.log('watch');
+            searchUser(data);
+          });
+
+          function searchUser(user){
+            var url = 'https://api.github.com/users/'+user;
+
+            var method = 'GET';
+            $http({
+              url: url,
+              method: method
+            }).
+            success(function(data){
+              console.log('Data: ', data);
+              $scope.user = data;
+            }).
+            error(function(err){
+              console.log('Erro: ', err);
+            });
+          }
+
+        }
+      ])
+      .controller('BeerController', ['$scope', '$http',
+        function($scope, $http){
+          var cerveja1 = {name: 'kaiser', price: 2};
+          var cerveja2 = {name: 'skol', price: 3};
+          var cerveja3 = {name: 'glacial', price: 4};
+          var cerveja4 = {name: 'polar', price: 6};
+
+          // ADICIONANDO AS CERVEJAS NO SCOPE DO CONTROLLER
+          $scope.cervejas = [cerveja1, cerveja2, cerveja3, cerveja4];
+
+      }]);
+
+      angular.module('workshopFilters', [])
+        .filter('reverseName', function () {
+          return function (text) {
+            if(text)
+              return text.split("").reverse().join("");
+          };
+        })
+        .filter('truncate', function () {
+          return function (text, length, end) {
+            if (isNaN(length))
+                length = 10;
+            if (end === undefined)
+                end = "...";
+            if (text.length <= length || text.length - end.length <= length) {
+                return text;
+            }
+            else {
+                return String(text).substring(0, length-end.length) + end;
+            }
+          };
+      });
+    </script>
+  </body>
+</html>
+

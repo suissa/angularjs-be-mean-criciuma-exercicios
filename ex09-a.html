@@ -1,0 +1,84 @@
+<!doctype html>
+<html data-ng-app="workshopBeMEAN">
+  <title>{{ workshop }}</title>
+  <body>
+
+    <div data-ng-controller='BeerController'>
+    <!-- Exibição do array de cervejas setado no BeerController -->
+      {{ cervejas }}
+
+      <pre>Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>
+      
+  <!--     <a href="" data-ng-click="predicate = 'name'; reverse=!reverse">Nome</a> -->
+
+      <table>
+        <thead>
+          <tr>
+            <th data-ng-click='ordenar("name")'>Nome</th>
+            <th data-ng-click='ordenar("price")'>Preço</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-ng-repeat='beer in cervejas | orderBy:predicate:reverse'>
+            <td>{{ beer.name }}</td>
+            <td>{{ beer.price }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+    <script>
+      angular.module('workshopBeMEAN', ['workshopFilters', 'workshopControllers']);
+
+      angular.module('workshopControllers', [])
+      .controller('BeerController', ['$scope', 
+        function($scope){
+          $scope.reverse = true;
+          $scope.predicate = 'name';
+
+          $scope.ordenar = function(predicado){
+            $scope.reverse = !$scope.reverse;
+            $scope.predicate = predicado;
+          }
+
+          $scope.cervejas = [{
+            name: 'Kaiser', price: 2
+            }, {
+              name: 'Skol', price: 3
+            }, {
+              name: 'Glacial', price: 4
+            }, {
+              name: 'Polar', price: 6
+            }, {
+              name: 'Heineken', price: 10
+            }
+          ];
+      }]);
+
+      angular.module('workshopFilters', [])
+        .filter('reverseName', function () {
+          return function (text) {
+            if(text)
+              return text.split("").reverse().join("");
+          };
+        })
+        .filter('truncate', function () {
+          return function (text, length, end) {
+            if (isNaN(length))
+                length = 10;
+            if (end === undefined)
+                end = "...";
+            if (text.length <= length || text.length - end.length <= length) {
+                return text;
+            }
+            else {
+                return String(text).substring(0, length-end.length) + end;
+            }
+          };
+      });
+    </script>
+  </body>
+</html>
+
