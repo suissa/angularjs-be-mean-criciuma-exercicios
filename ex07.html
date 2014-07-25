@@ -14,20 +14,20 @@
         adicionamos o atributo nd-model para linkarmos o valor
         na váriavel do nosso escopo local $scope.nome
      -->
-      <label>Seu nome: <input type="text" data-ng-model="nome"> </label>
+      <label for="nome">Seu nome: <input type="text" data-ng-model="nome"> </label>
 
       <!-- O valor em {{ nome }} é atualizado automagicamente através
           do two-way databinding
       -->
       <br>
-      <label>Workshop: <input type="text" data-ng-model="workshop"> </label>
+      <label for="workshop">Workshop: <input type="text" data-ng-model="workshop"> </label>
 
       <br>
       <br>
     </p>
     <p> 
 
-      <label>Lower<input type="text" data-ng-model="lower" data-ng-init="AAAA"> </label>
+      <label for="lower">Lower<input type="text" data-ng-model="lower" data-ng-init="AAAA" name="lower"> </label>
       <br>
       <strong>Minúsculas</strong>
       Lowercase {{lower}}: {{ lower | lowercase }}
